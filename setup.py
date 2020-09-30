@@ -12,7 +12,7 @@ setup(
     description = "Install packages from within code",
     license = "MIT",
     keywords = "install packages from within code",
-    url = "https://pypi.python.org/pypi/install",
+    url = "https://github.com/eugenekolo/pip-install",
     packages=['install'],
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
