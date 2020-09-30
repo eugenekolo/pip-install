@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name = "install",
-    version = "1.3.3",
+    version = "1.3.4",
     author = "Eugene Kolo",
     author_email = "eugene@kolobyte.com",
     description = "Install packages from within code",
