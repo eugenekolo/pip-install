@@ -43,9 +43,9 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
             importlib.import_module(pkg)
             return
         except ModuleNotFoundError:
-            ...
+            pass
         except Exception:
-            ...
+            psas
 
     if not _check_pip(): _get_pip()
 
