@@ -38,11 +38,14 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
         install_options: Optional arbitary list of install options to pass to pip install
     """
     # exit fast if pkg already installed
-    try:
-        importlib.import_module(pkg)
-        return
-    except ModuleNotFoundError:
-        ...
+    if sys.version[0] == '3':
+        try:
+            importlib.import_module(pkg)
+            return
+        except ModuleNotFoundError:
+            ...
+        except Exception:
+            ...
 
     if not _check_pip(): _get_pip()
 
