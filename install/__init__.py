@@ -1,8 +1,12 @@
 #!/usr/bin/python
+__version__ = "1.3.5"
+
 import subprocess
 import sys
 import os
 import tempfile
+import importlib
+
 if sys.version[0] == '3':
     import urllib.request as url
     from shlex import quote
@@ -30,13 +34,22 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
         pkg: Name of the package or requirements.txt file as a string, you can also use version specifiers like requests==1.2.3
         use_pep517: Optional boolean to force --use-pep517/--no-use-pep517
         requirements: Optional boolean if a requirements.txt was specified
-        pip_options: Optional arbitary list of global options to pass to pip 
+        pip_options: Optional arbitary list of global options to pass to pip
         install_options: Optional arbitary list of install options to pass to pip install
     """
+    # exit fast if pkg already installed
+    try:
+        importlib.import_module(pkg)
+        return
+    except ModuleNotFoundError:
+        pass
+    except Exception:
+        pass
+
     if not _check_pip(): _get_pip()
 
     cmd = [sys.executable, '-m', 'pip']
-    
+
     if pip_options:
         if isinstance(pip_options, list):
             options = [quote(option) for option in pip_options]
@@ -51,7 +64,7 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
             options = [quote(option) for option in install_options]
             cmd.extend(options)
         else:
-            raise TypeError('install_options passed to install must be a list') 
+            raise TypeError('install_options passed to install must be a list')
 
     if use_pep517 is True:
         cmd.append('--use-pep517')
@@ -60,9 +73,8 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
 
     if requirements:
         cmd.append('-r')
-    
+
     pkg = quote(pkg)
     cmd.append(pkg)
 
     subprocess.check_call(cmd)
-
