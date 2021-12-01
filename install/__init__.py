@@ -5,11 +5,11 @@ import subprocess
 import sys
 import os
 import tempfile
+import importlib
 
 if sys.version[0] == '3':
     import urllib.request as url
     from shlex import quote
-    import importlib
 else:
     import urllib as url
     from pipes import quote
@@ -38,14 +38,13 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
         install_options: Optional arbitary list of install options to pass to pip install
     """
     # exit fast if pkg already installed
-    if sys.version[0] == '3':
-        try:
-            importlib.import_module(pkg)
-            return
-        except ModuleNotFoundError:
-            pass
-        except Exception:
-            psas
+    try:
+        importlib.import_module(pkg)
+        return
+    except ModuleNotFoundError:
+        pass
+    except Exception:
+        pass
 
     if not _check_pip(): _get_pip()
 
@@ -79,4 +78,3 @@ def install(pkg, use_pep517=None, requirements=None, pip_options=None, install_o
     cmd.append(pkg)
 
     subprocess.check_call(cmd)
-
